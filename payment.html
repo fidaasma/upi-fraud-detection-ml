@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="description" content="Google Pay style UPI payment simulation for fraud detection">
+  <title>GPay - UPI Payment</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="phone-container">
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <span class="time" id="statusBarTime">12:00</span>
+      <div class="icons">
+        <span>📶</span>
+        <span>🔋</span>
+      </div>
+    </div>
+
+    <!-- Screen 1: Home -->
+    <div class="screen active" id="homeScreen">
+      <div class="app-header">
+        <h1>
+          <span class="logo">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+              <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+              <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+              <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+            </svg>
+          </span>
+          Google Pay
+        </h1>
+      </div>
+      <div class="home-content">
+        <div class="balance-card">
+          <div class="balance-label">Available Balance</div>
+          <div class="balance-amount" id="balanceAmount">₹24,500.00</div>
+        </div>
+        
+        <div class="quick-actions">
+          <div class="quick-action" onclick="document.getElementById('sendMoneyBtn').click()">
+            <div class="icon">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+              </svg>
+            </div>
+            <span>Pay</span>
+          </div>
+          <div class="quick-action">
+            <div class="icon">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+              </svg>
+            </div>
+            <span>Cards</span>
+          </div>
+          <div class="quick-action">
+            <div class="icon">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <span>Bills</span>
+          </div>
+          <div class="quick-action">
+            <div class="icon">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+              </svg>
+            </div>
+            <span>History</span>
+          </div>
+        </div>
+        
+        <button class="send-money-btn" id="sendMoneyBtn">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+          </svg>
+          Send Money
+        </button>
+      </div>
+    </div>
+
+    <!-- Screen 2: Enter UPI ID -->
+    <div class="screen input-screen" id="upiScreen">
+      <div class="input-header">
+        <button class="back-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          </svg>
+          Back
+        </button>
+        <h2>To whom?</h2>
+      </div>
+      <div class="input-content">
+        <div class="input-card">
+          <div class="input-group">
+            <label for="upiInput">Enter UPI ID</label>
+            <input 
+              type="text" 
+              id="upiInput" 
+              placeholder="example@upi"
+              autocomplete="off"
+              autocapitalize="none"
+            >
+          </div>
+          <button class="continue-btn" id="continueToAmount" disabled>
+            Continue
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Screen 3: Enter Amount -->
+    <div class="screen input-screen" id="amountScreen">
+      <div class="input-header">
+        <button class="back-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          </svg>
+          Back
+        </button>
+        <h2>Enter Amount</h2>
+      </div>
+      <div class="input-content">
+        <div class="input-card">
+          <div class="input-group">
+            <label for="amountInput">Amount to send</label>
+            <div class="amount-input-wrapper">
+              <span class="currency">₹</span>
+              <input 
+                type="number" 
+                id="amountInput" 
+                placeholder="0"
+                min="1"
+                max="100000"
+                autocomplete="off"
+              >
+            </div>
+          </div>
+          <button class="continue-btn" id="continueToConfirm" disabled>
+            Continue
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Screen 4: Confirm Transaction -->
+    <div class="screen input-screen" id="confirmScreen">
+      <div class="input-header">
+        <button class="back-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          </svg>
+          Back
+        </button>
+        <h2>Confirm Payment</h2>
+      </div>
+      <div class="input-content">
+        <div class="confirm-card">
+          <div class="confirm-header">
+            <div class="avatar" id="confirmAvatar">J</div>
+            <div class="upi-id" id="confirmUpi">john@upi</div>
+          </div>
+          
+          <div class="confirm-amount">
+            <div class="label">You're sending</div>
+            <div class="amount" id="confirmAmount">₹1,000</div>
+          </div>
+          
+          <div class="confirm-details">
+            <div class="detail-row">
+              <span class="label">Time</span>
+              <span class="value" id="confirmTime">31 Dec 2025, 12:00:00 PM</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Device</span>
+              <span class="value" id="confirmDevice">Samsung Galaxy S23</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Location</span>
+              <span class="value" id="confirmLocation">Mumbai, India</span>
+            </div>
+          </div>
+          
+          <button class="pay-btn" id="payBtn">
+            Pay ₹<span id="payAmount">1,000</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Screen 5: Result -->
+    <div class="screen" id="resultScreen">
+      <div class="app-header">
+        <h1>
+          <span class="logo">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+              <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+              <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+              <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+            </svg>
+          </span>
+          Google Pay
+        </h1>
+      </div>
+      <div class="result-content">
+        <div class="result-icon success" id="resultIcon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+        
+        <h2 class="result-title" id="resultTitle">Transaction Safe</h2>
+        <p class="result-message" id="resultMessage">
+          ✅ Transaction looks safe. You can proceed with confidence.
+        </p>
+        
+        <div class="result-card">
+          <div class="row">
+            <span class="label">Amount</span>
+            <span class="value" id="resultAmount">₹1,000</span>
+          </div>
+          <div class="row">
+            <span class="label">To</span>
+            <span class="value" id="resultUpi">john@upi</span>
+          </div>
+        </div>
+        
+        <button class="done-btn" id="doneBtn">Done</button>
+      </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+      <div class="spinner"></div>
+      <p>Analyzing transaction...</p>
+    </div>
+  </div>
+
+  <script src="/static/script.js"></script>
+</body>
+</html>
